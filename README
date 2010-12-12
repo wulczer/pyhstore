@@ -1,0 +1,57 @@
+This is pyhstore, a Python extension module that allows bidirectional
+transformation between PostgreSQL hstore and Python dictionary objects
+in PL/Python, the PostgreSQL embedded Python programming language.
+
+To build it you will need the PostgreSQL development headers, as well
+as the header file for the hstore module.
+
+The easiest way to build and install pyhstore is:
+$ python setup.py build_py
+$ python setup.py build_ext -I $(pg_config --includedir-server):/usr/src/postgresql-x.x.x/contrib/hstore
+$ sudo python setup.py install
+
+After these steps check if you have correctly installed pyhstore, by
+connecting to your database and issuing as a superuser:
+
+=# do 'import pyhstore' language plpythonu;
+
+If the second command completed successfully, you're done with the
+installation. If not make sure that your server's PYTHONPATH includes
+the path where extension modules are installed.
+
+Using pyhstore
+==============
+
+You use pyhstore inside your PL/Python functions to serialise and
+unserialise hstores from dictionaries. The serialisation functions
+actually accept and output text, but in the format that can then by
+interpreted by PostgreSQL as hstores. The module itself is a stopgap
+solution to enable easier hstore usage until PL/Python gets native
+hstore handling abilities.
+
+And example of using pyhstore in PL/Python would be:
+
+CREATE FUNCTION hstore_xform(h hstore) RETURNS hstore AS
+$$
+import pyhstore
+
+d = pyhstore.hstore_parse(h)
+total = 0
+
+for key, val in d.items():
+    v = int(val)
+    total += v
+    d[key] = str(2 * v)
+
+d["total"] = str(total)
+
+return pyhstore.hstore_serialize(d)
+$$ LANGUAGE plpythonu;
+
+select * from hstore_xform('John => 10, Mary => 30, Tom => 100');
+
+The output will be a hstore with the value
+'"Tom"=>"200", "John"=>"20", "Mary"=>"60", "total"=>"140"'.
+
+The module is distributed under the MIT License.
+You can contact the author, Jan Urbanski, at wulczer@wulczer.org.
