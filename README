@@ -2,8 +2,11 @@ This is pyhstore, a Python extension module that allows bidirectional
 transformation between PostgreSQL hstore and Python dictionary objects
 in PL/Python, the PostgreSQL embedded Python programming language.
 
-To build it you will need the PostgreSQL development headers, as well
-as the header file for the hstore module.
+To build it you will need the Python and PostgreSQL development
+headers, as well as the header file for the hstore module.
+
+It has been tested on PostgreSQL 9.0 and Python 2.6, but should work
+on earlier versions. It will not work for Python 3.
 
 The easiest way to build and install pyhstore is:
 $ python setup.py build_py
