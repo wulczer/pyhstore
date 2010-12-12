@@ -6,4 +6,4 @@ except ImportError:
 # execute a dummy select to make sure hstore is loaded in the database
 plpy.execute("select '1=>1'::hstore")
 # import the module functions
-from _pyhstore import hstore_parse, hstore_serialize
+from _pyhstore import parse_hstore, serialize_hstore

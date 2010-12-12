@@ -35,7 +35,7 @@ CREATE FUNCTION hstore_xform(h hstore) RETURNS hstore AS
 $$
 import pyhstore
 
-d = pyhstore.hstore_parse(h)
+d = pyhstore.parse_hstore(h)
 total = 0
 
 for key, val in d.items():
@@ -45,7 +45,7 @@ for key, val in d.items():
 
 d["total"] = str(total)
 
-return pyhstore.hstore_serialize(d)
+return pyhstore.serialize_hstore(d)
 $$ LANGUAGE plpythonu;
 
 select * from hstore_xform('John => 10, Mary => 30, Tom => 100');
