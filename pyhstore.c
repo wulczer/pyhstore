@@ -98,8 +98,8 @@ serialize_hstore(PyObject *self, PyObject *args)
         Py_ssize_t  pos;
         char       *keys;
         char       *vals;
-        int         keylen;
-        int         vallen;
+        Py_ssize_t  keylen;
+        Py_ssize_t  vallen;
         int         buflen;
         int         i;
 
