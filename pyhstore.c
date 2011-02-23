@@ -26,8 +26,13 @@ parse_hstore(PyObject *self, PyObject *args)
     PyObject      *ret;
     MemoryContext  oldcontext = CurrentMemoryContext;
 
-    if (!PyArg_ParseTuple(args, "s", &hstore_text))
+    if (!PyArg_ParseTuple(args, "z", &hstore_text))
         return NULL;
+
+    if (hstore_text == NULL) {
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
 
     PG_TRY();
     {
@@ -85,8 +90,19 @@ serialize_hstore(PyObject *self, PyObject *args)
     char          *hstore_text;
     MemoryContext  oldcontext = CurrentMemoryContext;
 
-    if (!PyArg_ParseTuple(args, "O!", &PyDict_Type, &dict))
+    if (!PyArg_ParseTuple(args, "O", &dict))
         return NULL;
+
+    if (dict == Py_None) {
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
+    if (!PyDict_Check(dict)) {
+        PyErr_Format(PyExc_TypeError, "argument 1 must be dict, not %.200s",
+                     dict->ob_type->tp_name);
+        return NULL;
+    }
 
     pcount = PyDict_Size(dict);
 
