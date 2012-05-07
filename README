@@ -27,7 +27,7 @@ Using pyhstore
 
 You use pyhstore inside your PL/Python functions to serialise and
 unserialise hstores from dictionaries. The serialisation functions
-actually accept and output text, but in the format that can then by
+actually accept and output text, but in the format that can then be
 interpreted by PostgreSQL as hstores. The module itself is a stopgap
 solution to enable easier hstore usage until PL/Python gets native
 hstore handling abilities.
